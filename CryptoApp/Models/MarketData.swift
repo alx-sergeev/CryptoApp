@@ -178,15 +178,15 @@ struct MarketData: Codable {
     }
     
     var marketCap: String {
-        if let item = totalMarketCap.first(where: { $0.key == "rub" }) {
-            return "\u{20BD}" + item.value.formattedWithAbbreviations()
+        if let item = totalMarketCap.first(where: { $0.key == "usd" }) {
+            return "$" + item.value.formattedWithAbbreviations()
         }
         return ""
     }
     
     var volume: String {
-        if let item = totalVolume.first(where: { $0.key == "rub" }) {
-            return "\u{20BD}" + item.value.formattedWithAbbreviations()
+        if let item = totalVolume.first(where: { $0.key == "usd" }) {
+            return "$" + item.value.formattedWithAbbreviations()
         }
         return ""
     }

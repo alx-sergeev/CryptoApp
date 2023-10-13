@@ -29,7 +29,7 @@ struct PortfolioView: View {
                     }
                 }
             }
-            .navigationTitle("Изменить портфолио")
+            .navigationTitle("Edit Portfolio")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     XMarkButtonView {
@@ -88,7 +88,7 @@ extension PortfolioView {
     private var portfolioInputSection: some View {
         VStack(spacing: 20) {
             HStack {
-                Text("Текущая цена \(selectedCoin?.symbol.uppercased() ?? ""):")
+                Text("Current price of \(selectedCoin?.symbol.uppercased() ?? ""):")
                 Spacer()
                 Text("\(selectedCoin?.currentPrice.asCurrencyWith6Decimals() ?? "")")
             }
@@ -96,9 +96,9 @@ extension PortfolioView {
             Divider()
             
             HStack {
-                Text("Количество:")
+                Text("Amount holding:")
                 Spacer()
-                TextField("Например, 1.4", text: $quantityText)
+                TextField("Ex: 1.4", text: $quantityText)
                     .multilineTextAlignment(.trailing)
                     .keyboardType(.decimalPad)
             }
@@ -106,7 +106,7 @@ extension PortfolioView {
             Divider()
             
             HStack {
-                Text("Итого:")
+                Text("Current value:")
                 Spacer()
                 Text(getCurrentValue().asCurrencyWith2Decimals())
             }
@@ -122,7 +122,7 @@ extension PortfolioView {
                 .opacity(showCheckmark ? 1 : 0)
             
             Button(action: saveButtonPressed) {
-                Text("Сохранить".uppercased())
+                Text("Save".uppercased())
             }
             .opacity(
                 (selectedCoin != nil && selectedCoin?.currentHoldings != Double(quantityText)) ? 1 : 0

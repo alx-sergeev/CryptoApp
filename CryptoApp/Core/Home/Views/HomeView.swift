@@ -75,7 +75,7 @@ extension HomeView {
             
             Spacer()
             
-            Text(showPortfolio ? "Портфолио" : "Курс криптовалюты")
+            Text(showPortfolio ? "Portfolio" : "Live Prices")
                 .font(.headline)
                 .fontWeight(.heavy)
                 .foregroundColor(.theme.accent)
@@ -104,6 +104,9 @@ extension HomeView {
             }
         }
         .listStyle(.plain)
+        .refreshable {
+            viewModel.reloadData()
+        }
     }
     
     private var portfolioCoinsList: some View {
@@ -114,6 +117,9 @@ extension HomeView {
             }
         }
         .listStyle(.plain)
+        .refreshable {
+            viewModel.reloadData()
+        }
     }
     
     private var columnTitles: some View {
