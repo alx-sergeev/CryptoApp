@@ -124,16 +124,64 @@ extension HomeView {
     
     private var columnTitles: some View {
         HStack {
-            Text("Coin")
+            HStack(spacing: 4) {
+                Text("Coin")
+                
+                Image(systemName: "chevron.down")
+                    .opacity(
+                        (viewModel.sortOption == .rankAsc || viewModel.sortOption == .rankDesc) ?
+                        1 : 0
+                    )
+                    .rotationEffect(
+                        Angle(degrees: viewModel.sortOption == .rankAsc ? 180 : 0 )
+                    )
+            }
+            .onTapGesture {
+                withAnimation(.default) {
+                    viewModel.sortOption = (viewModel.sortOption == .rankAsc) ? .rankDesc : .rankAsc
+                }
+            }
             
             Spacer()
             
             if showPortfolio {
-                Text("Holdings")
+                HStack(spacing: 4) {
+                    Text("Holdings")
+                    
+                    Image(systemName: "chevron.down")
+                        .opacity(
+                            (viewModel.sortOption == .holdingAsc || viewModel.sortOption == .holdingDesc) ?
+                            1 : 0
+                        )
+                        .rotationEffect(
+                            Angle(degrees: viewModel.sortOption == .holdingAsc ? 180 : 0 )
+                        )
+                }
+                .onTapGesture {
+                    withAnimation(.default) {
+                        viewModel.sortOption = (viewModel.sortOption == .holdingAsc) ? .holdingDesc : .holdingAsc
+                    }
+                }
             }
             
-            Text("Price")
-                .frame(width: UIScreen.main.bounds.width / 3.5, alignment: .trailing)
+            HStack(spacing: 4) {
+                Text("Price")
+                
+                Image(systemName: "chevron.down")
+                    .opacity(
+                        (viewModel.sortOption == .priceAsc || viewModel.sortOption == .priceDesc) ?
+                        1 : 0
+                    )
+                    .rotationEffect(
+                        Angle(degrees: viewModel.sortOption == .priceAsc ? 180 : 0 )
+                    )
+            }
+            .frame(width: UIScreen.main.bounds.width / 3.5, alignment: .trailing)
+            .onTapGesture {
+                withAnimation(.default) {
+                    viewModel.sortOption = (viewModel.sortOption == .priceAsc) ? .priceDesc : .priceAsc
+                }
+            }
         }
         .font(.caption)
         .foregroundColor(.theme.secondaryText)
