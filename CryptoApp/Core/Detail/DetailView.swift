@@ -26,6 +26,8 @@ struct DetailView: View {
     ]
     private let spacing: CGFloat = 30
     
+    @State private var showFullDescription = false
+    
     init(coin: Coin) {
         _vm = StateObject(wrappedValue: DetailViewModel(coin: coin))
     }
@@ -39,12 +41,12 @@ struct DetailView: View {
                 VStack(spacing: 20) {
                     overviewTitleView
                     Divider()
-                    overviewContentView
-                    
-                    
+                    descriptionView
+                    overviewStatsView
                     additionalTitleView
                     Divider()
-                    additionalContentView
+                    additionalStatsView
+                    websitesView
                 }
                 .padding()
             }
@@ -87,7 +89,33 @@ extension DetailView {
             .frame(maxWidth: .infinity, alignment: .leading)
     }
     
-    private var overviewContentView: some View {
+    private var descriptionView: some View {
+        ZStack {
+            if let description = vm.description, !description.isEmpty {
+                VStack(alignment: .leading) {
+                    Text(description)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .lineLimit(showFullDescription ? nil : 3)
+                        .font(.callout)
+                        .foregroundColor(.theme.secondaryText)
+                    
+                    Button(action: {
+                        withAnimation(.easeInOut) {
+                            showFullDescription.toggle()
+                        }
+                    }) {
+                        Text(showFullDescription ? "Less" : "Read more...")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .padding(.vertical, 4)
+                    }
+                    .tint(.blue)
+                }
+            }
+        }
+    }
+    
+    private var overviewStatsView: some View {
         LazyVGrid(
             columns: columns,
             alignment: .leading,
@@ -108,7 +136,7 @@ extension DetailView {
             .frame(maxWidth: .infinity, alignment: .leading)
     }
     
-    private var additionalContentView: some View {
+    private var additionalStatsView: some View {
         LazyVGrid(
             columns: columns,
             alignment: .leading,
@@ -119,5 +147,20 @@ extension DetailView {
                 StatisticView(stat: stat)
             }
         }
+    }
+    
+    private var websitesView: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            if let websiteString = vm.websiteURL, let url = URL(string: websiteString) {
+                Link("Website", destination: url)
+            }
+            
+            if let redditString = vm.redditURL, let url = URL(string: redditString) {
+                Link("Reddit", destination: url)
+            }
+        }
+        .tint(.blue)
+        .font(.headline)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
