@@ -12,6 +12,7 @@ struct HomeView: View {
     
     @State private var showPortfolio = false // animation right
     @State private var showPortfolioView = false // new sheet
+    @State private var showSettingsView = false // new sheet
     
     @State private var selectedCoin: Coin?
     @State private var showDetailVeiw = false
@@ -29,11 +30,8 @@ struct HomeView: View {
             // Content layer
             VStack {
                 homeHeader
-                
                 HomeStatsView(showPortfolio: $showPortfolio)
-                
                 SearchBarView(searchText: $viewModel.searchText)
-                
                 columnTitles
                 
                 if !showPortfolio {
@@ -45,6 +43,9 @@ struct HomeView: View {
                 }
                 
                 Spacer()
+            }
+            .sheet(isPresented: $showSettingsView) {
+                SettingsView()
             }
         }
         .background(
@@ -73,6 +74,8 @@ extension HomeView {
                 .onTapGesture {
                     if showPortfolio {
                         showPortfolioView.toggle()
+                    } else {
+                        showSettingsView.toggle()
                     }
                 }
                 .animation(.none, value: showPortfolio)
