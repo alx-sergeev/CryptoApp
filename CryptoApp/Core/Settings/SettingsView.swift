@@ -16,13 +16,18 @@ struct SettingsView: View {
     
     var body: some View {
         NavigationView {
-            List {
-                aboutSectionView
-                    .listRowBackground(Color.theme.background.opacity(0.5))
-                coinGeckoSectionView
-                    .listRowBackground(Color.theme.background.opacity(0.5))
-                applicationSectionView
-                    .listRowBackground(Color.theme.background.opacity(0.5))
+            ZStack {
+                Color.theme.background
+                    .ignoresSafeArea()
+                
+                List {
+                    aboutSectionView
+                        .listRowBackground(Color.theme.background.opacity(0.5))
+                    coinGeckoSectionView
+                        .listRowBackground(Color.theme.background.opacity(0.5))
+                    applicationSectionView
+                        .listRowBackground(Color.theme.background.opacity(0.5))
+                }
             }
             .listStyle(.grouped)
             .tint(.blue)
