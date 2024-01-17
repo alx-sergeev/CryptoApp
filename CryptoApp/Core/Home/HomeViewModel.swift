@@ -9,8 +9,7 @@ import Foundation
 import Combine
 
 class HomeViewModel: ObservableObject {
-    private let coinDataService = CoinDataService()
-    private let marketDataService = MarketDataService()
+    private let apiService = ApiService.shared
     private let porftolioDataService = PortfolioDataService()
     private var cancellables = Set<AnyCancellable>()
     
@@ -22,14 +21,20 @@ class HomeViewModel: ObservableObject {
     
     
     init() {
-        addSubscribers()
+        startup()
     }
     
+    
+    private func startup() {
+        apiService.getCoins()
+        apiService.getMarketData()
+        addSubscribers()
+    }
     
     private func addSubscribers() {
         // updates allCoins
         $searchText
-            .combineLatest(coinDataService.$allCoins, $sortOption)
+            .combineLatest(apiService.$allCoins, $sortOption)
             .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
             .map(filterAndSortCoins)
             .sink { [weak self] (returnedCoins) in
@@ -49,7 +54,7 @@ class HomeViewModel: ObservableObject {
             .store(in: &cancellables)
         
         // updates marketData
-        marketDataService.$marketData
+        apiService.$marketData
             .combineLatest($portfolioCoins)
             .map(mapGlobalMarketData)
             .sink { [weak self] (returnedStats) in
@@ -66,8 +71,8 @@ extension HomeViewModel {
     }
     
     func reloadData() {
-        coinDataService.getCoins()
-        marketDataService.getMarketData()
+        apiService.getCoins()
+        apiService.getMarketData()
     }
     
     private func filterAndSortCoins(text: String, coins: [Coin], sort: SortOption) -> [Coin] {

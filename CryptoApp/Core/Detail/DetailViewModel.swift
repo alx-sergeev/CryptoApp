@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 class DetailViewModel: ObservableObject {
-    private let coinDetailDataService: CoinDetailDataService
+    private let apiService = ApiService.shared
     private var cancellables = Set<AnyCancellable>()
     
     @Published var coin: Coin
@@ -21,13 +21,13 @@ class DetailViewModel: ObservableObject {
     
     init(coin: Coin) {
         self.coin = coin
-        self.coinDetailDataService = CoinDetailDataService(coin: coin)
+        self.apiService.getCoinDetail(coin: coin)
         
         addSubscribers()
     }
     
     private func addSubscribers() {
-        coinDetailDataService.$coinDetail
+        apiService.$coinDetail
             .combineLatest($coin)
             .map(mapDataToStatistics)
             .sink { [weak self] (returnedArrays) in
@@ -36,7 +36,7 @@ class DetailViewModel: ObservableObject {
             }
             .store(in: &cancellables)
         
-        coinDetailDataService.$coinDetail
+        apiService.$coinDetail
             .sink { [weak self] (returnedCoinDetail) in
                 self?.description = returnedCoinDetail?.readableDescription
                 self?.websiteURL = returnedCoinDetail?.links?.homepage?.first
